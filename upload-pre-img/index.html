@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>upload pre img</title> 
+	<style>
+		.upload-wrapper{
+			cursor: pointer;
+			width: 400px;
+			height: 200px;
+			display: flex;
+			align-items:center;
+			justify-content: center;
+			border: 1px dashed #666;
+			border-radius: 3px;
+		}
+		.upload-wrapper > div{
+			text-align: center;
+		}
+		.upload-wrapper svg{ 
+			fill: blue;
+			width: 48px;
+		}
+		.upload-wrapper > input[type="file"]{
+			display: none;
+		}
+		.mini-img {
+		    margin-top: 20px;
+		}
+		.mini-img > img{
+			position: relative;
+			width: 100px;
+		    margin-right: 20px;
+	        cursor: pointer;
+		}
+		.mini-img > img:hover{
+		    opacity: .5;
+		}
+		.mini-img > img::before{
+			
+		}
+		.mini-img > img::after{
+
+		}
+		.pre-wrapper{
+			position: fixed;
+			width: 100vw;
+			height: 100vh; 
+			top: 0;
+			left: 0;
+			background: rgba(0,21,41,.5);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.pre-wrapper > div > img{
+			width: 600px;
+			height: 600px;
+		}
+		.hidden{
+			display: none;
+		}
+	</style>
+</head>
+<body>
+	<div class="upload-wrapper">
+		<input id = "uploadfile" type="file">
+		<div>
+			<svg viewBox="0 0 512 512"><path d="M403.002 217.001C388.998 148.002 328.998 96 256 96c-57.998 0-107.998 32.998-132.998 81.001C63.002 183.002 16 233.998 16 296c0 65.996 53.999 120 120 120h260c55 0 100-45 100-100 0-52.998-40.996-96.001-92.998-98.999zM288 276v76h-64v-76h-68l100-100 100 100h-68z"/></svg>
+			<div>点击上传</div>
+		</div>
+	</div>
+	<div class="mini-img"> 
+	</div>
+	<div class="pre-wrapper hidden">
+		<div>
+			<img id="pre-img" src="" alt="">
+		</div>
+	</div>
+	<script>
+	(function(){ 
+		let wrapper = document.querySelector('.upload-wrapper');
+		let uploadfile = document.getElementById('uploadfile');
+		let preimg = document.getElementById('pre-img');
+		let miniimg = document.querySelector('.mini-img');
+		let prewrapper = document.querySelector('.pre-wrapper');
+
+		prewrapper.addEventListener('click',function(){
+			preimg.src = '';
+			this.classList.toggle('hidden');
+		})
+
+		wrapper.addEventListener('click', function(){
+			uploadfile.click();
+		});
+
+		uploadfile.onchange = function(e){
+			let file = e.target.files[0]; 
+			//flilereader(file);
+			createUrl(file) 
+		}
+
+		function flilereader(file){
+			var reader = new FileReader; 
+  			reader.onload = function(){
+  				let img = document.createElement('img');
+				img.src = reader.result;
+				img.addEventListener('click',preImgHandler)
+	    		miniimg.appendChild(img);
+  			}
+  			reader.readAsDataURL(file);
+		}
+
+		function createUrl(file){
+			var url1 = window.URL.createObjectURL(file);  
+			let img = document.createElement('img');
+			img.src = url1;
+			img.addEventListener('click',preImgHandler)
+   			miniimg.appendChild(img);
+		}
+
+
+		function preImgHandler(event){
+			prewrapper.classList.remove('hidden');
+			preimg.src = event.target.src;
+		}
+
+	})();
+	</script>
+</body>
+</html>
